@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Ujwal Pande — Customer Support Team Leader</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,300&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#04060f;--bg2:#080b18;--surface:rgba(255,255,255,.04);--surface2:rgba(255,255,255,.07);
+  --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.12);
+  --ink:#e8e4f0;--muted:#6b7280;--muted2:#9ca3af;
+  --accent:#6c63ff;--accent2:#a78bfa;--accent3:#ec4899;
+  --teal:#2dd4bf;--gold:#fbbf24;--green:#34d399;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;overflow-x:hidden;cursor:none;}
+#particle-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
+#cur{position:fixed;z-index:9999;pointer-events:none;transform:translate(-50%,-50%);}
+#cur-dot{width:8px;height:8px;background:var(--accent2);border-radius:50%;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);transition:transform .15s,background .2s;}
+#cur-ring{width:40px;height:40px;border:1px solid rgba(167,139,250,.4);border-radius:50%;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);transition:width .3s,height .3s,border-color .3s;}
+body:has(a:hover) #cur-dot,body:has(button:hover) #cur-dot{transform:translate(-50%,-50%) scale(2.5);background:var(--accent3);}
+body:has(a:hover) #cur-ring,body:has(button:hover) #cur-ring{width:64px;height:64px;border-color:rgba(236,72,153,.6);}
+#prog{position:fixed;top:0;left:0;height:2px;z-index:300;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent3),var(--teal));transition:width .08s;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:66px;display:flex;align-items:center;justify-content:space-between;padding:0 60px;background:rgba(4,6,15,.75);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:.12em;color:var(--ink);text-decoration:none;}
+.nav-logo span{color:var(--accent2);}
+.nav-links{display:flex;gap:6px;list-style:none;}
+.nav-links a{color:var(--muted2);text-decoration:none;font-size:12px;font-weight:500;padding:7px 15px;border-radius:100px;border:1px solid transparent;transition:all .2s;letter-spacing:.06em;text-transform:uppercase;}
+.nav-links a:hover{color:var(--ink);border-color:var(--border2);background:var(--surface2);}
+.nav-cta{background:var(--accent)!important;color:#fff!important;border-color:transparent!important;font-weight:700!important;}
+.nav-cta:hover{background:var(--accent2)!important;box-shadow:0 0 24px rgba(108,99,255,.5)!important;}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px;}
+.hamburger span{width:22px;height:1.5px;background:var(--ink);display:block;}
+.mobile-menu{display:none;flex-direction:column;position:fixed;top:66px;left:0;right:0;background:var(--bg2);border-bottom:1px solid var(--border);padding:1rem 24px;z-index:199;list-style:none;transform:translateY(-110%);transition:transform .3s ease;}
+.mobile-menu.open{transform:translateY(0);}
+.mobile-menu li a{display:block;padding:.9rem 0;border-bottom:1px solid var(--border);color:var(--ink);text-decoration:none;font-size:.9rem;letter-spacing:.08em;text-transform:uppercase;}
+
+/* HERO */
+#hero{min-height:100vh;padding:130px 60px 80px;display:flex;align-items:center;position:relative;overflow:hidden;z-index:1;}
+.hero-inner{max-width:1160px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 400px;gap:60px;align-items:center;position:relative;z-index:2;}
+.hero-card-wrap{perspective:1000px;}
+.hero-card{background:rgba(255,255,255,.03);border:1px solid var(--border2);border-radius:28px;padding:40px;position:relative;transform-style:preserve-3d;transition:transform .05s;box-shadow:0 40px 80px rgba(0,0,0,.5),0 0 80px rgba(108,99,255,.07);overflow:hidden;}
+.hero-card::before{content:'';position:absolute;inset:0;border-radius:28px;background:linear-gradient(135deg,rgba(108,99,255,.07) 0%,transparent 60%,rgba(236,72,153,.05) 100%);pointer-events:none;}
+.card-shine{position:absolute;inset:0;border-radius:28px;pointer-events:none;opacity:0;transition:opacity .3s;}
+.hero-photo-outer{width:150px;height:150px;margin:0 auto 24px;position:relative;}
+.hero-photo-ring{position:absolute;inset:-3px;border-radius:50%;background:conic-gradient(var(--accent),var(--accent3),var(--teal),var(--accent));animation:spin 5s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.hero-photo-inner{position:absolute;inset:3px;border-radius:50%;background:var(--bg);overflow:hidden;}
+.hero-photo-inner img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.card-name{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;text-align:center;margin-bottom:4px;}
+.card-title{font-size:12px;font-weight:500;color:var(--accent2);text-align:center;letter-spacing:.1em;text-transform:uppercase;margin-bottom:20px;}
+.card-divider{height:1px;background:var(--border2);margin-bottom:20px;}
+.card-stats{display:flex;justify-content:space-around;margin-bottom:20px;}
+.cs-num{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:.06em;color:var(--accent2);display:block;line-height:1;text-align:center;}
+.cs-lbl{font-size:10px;color:var(--muted2);font-weight:500;text-transform:uppercase;letter-spacing:.1em;display:block;text-align:center;}
+.avail-pill{display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2);border-radius:100px;padding:8px 18px;font-size:11px;font-weight:700;color:var(--green);letter-spacing:.08em;text-transform:uppercase;}
+.avail-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(52,211,153,.5);}50%{box-shadow:0 0 0 6px rgba(52,211,153,0);}}
+.float-badge{position:absolute;background:rgba(4,6,15,.88);backdrop-filter:blur(12px);border:1px solid var(--border2);border-radius:14px;padding:10px 16px;font-size:12px;font-weight:600;color:var(--ink);white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,.4);z-index:3;pointer-events:none;}
+.fb1{top:20%;left:-6%;animation:fbA 5s ease-in-out infinite;}
+.fb2{top:60%;left:-10%;animation:fbB 6s ease-in-out infinite;}
+.fb3{top:12%;right:3%;animation:fbC 4.5s ease-in-out infinite;}
+.fbd{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;vertical-align:middle;}
+@keyframes fbA{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+@keyframes fbB{0%,100%{transform:translateY(0);}50%{transform:translateY(10px);}}
+@keyframes fbC{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+.hero-eyebrow{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);margin-bottom:20px;display:flex;align-items:center;gap:12px;opacity:0;animation:riseIn .7s ease .1s forwards;}
+.hero-eyebrow::before{content:'';width:30px;height:1px;background:var(--teal);}
+.hero-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(72px,10vw,140px);line-height:.9;letter-spacing:.04em;margin-bottom:24px;opacity:0;animation:riseIn .9s ease .2s forwards;}
+.hero-name .n1{display:block;color:var(--ink);}
+.hero-name .n2{display:block;background:linear-gradient(90deg,var(--accent2),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{font-size:16px;color:var(--muted2);margin-bottom:16px;font-style:italic;opacity:0;animation:riseIn .8s ease .35s forwards;}
+.hero-desc{max-width:520px;color:var(--muted2);line-height:1.9;margin-bottom:48px;font-size:14.5px;opacity:0;animation:riseIn .8s ease .48s forwards;}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;opacity:0;animation:riseIn .8s ease .6s forwards;}
+.btn-glow{display:inline-flex;align-items:center;gap:9px;background:var(--accent);color:#fff;padding:14px 32px;border-radius:100px;font-weight:700;font-size:13.5px;text-decoration:none;font-family:'DM Sans',sans-serif;transition:transform .2s,box-shadow .2s,background .2s;letter-spacing:.04em;}
+.btn-glow:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(108,99,255,.5);background:var(--accent2);}
+.btn-glass{display:inline-flex;align-items:center;gap:9px;background:var(--surface2);color:var(--ink);padding:14px 32px;border-radius:100px;border:1px solid var(--border2);font-weight:500;font-size:13.5px;text-decoration:none;transition:transform .2s,border-color .2s,background .2s;font-family:'DM Sans',sans-serif;}
+.btn-glass:hover{border-color:rgba(167,139,250,.4);transform:translateY(-3px);background:rgba(108,99,255,.08);}
+.tipwrap{position:relative;}
+.tip{position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%) translateY(6px);background:var(--surface2);border:1px solid var(--border2);color:var(--ink);font-size:11.5px;font-weight:600;padding:7px 14px;border-radius:8px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:10;}
+.tipwrap:hover .tip{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* MARQUEE */
+.marquee-wrap{overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:12px 0;background:var(--bg2);position:relative;z-index:1;}
+.marquee-track{display:flex;animation:mq 24s linear infinite;width:max-content;}
+.marquee-track:hover{animation-play-state:paused;}
+.mq-item{display:inline-flex;align-items:center;gap:10px;padding:0 32px;font-size:11.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);}
+.mq-sep{color:var(--accent2);}
+@keyframes mq{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* SECTIONS */
+section{padding:110px 60px;position:relative;z-index:1;}
+.container{max-width:1160px;margin:0 auto;}
+.s-label{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent2);margin-bottom:14px;display:flex;align-items:center;gap:12px;}
+.s-label::before{content:'';width:24px;height:1px;background:var(--accent2);}
+.s-head{font-family:'Playfair Display',serif;font-size:clamp(34px,4.5vw,58px);font-weight:700;letter-spacing:-.02em;line-height:1.08;margin-bottom:56px;}
+.s-head em{font-style:italic;color:var(--accent2);}
+
+/* ABOUT */
+.about-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:80px;align-items:start;}
+.ap{color:var(--muted2);line-height:2;margin-bottom:20px;font-size:15px;}
+.ap strong{color:var(--ink);font-weight:600;}
+.awards{display:flex;flex-direction:column;gap:12px;margin-top:36px;}
+.aw-card{display:flex;align-items:center;gap:16px;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:18px 22px;transition:transform .25s,border-color .25s,box-shadow .25s;position:relative;overflow:hidden;}
+.aw-card::after{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(to bottom,var(--accent),var(--accent3));border-radius:3px 0 0 3px;}
+.aw-card:hover{transform:translateX(6px);border-color:rgba(108,99,255,.3);box-shadow:0 8px 30px rgba(108,99,255,.08);}
+.aw-t{font-weight:700;font-size:14px;}
+.aw-s{font-size:12px;color:var(--muted2);margin-top:2px;}
+.info-block{margin-bottom:30px;}
+.info-title{font-size:10px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+.tag-row{display:flex;flex-wrap:wrap;gap:8px;}
+.tag{background:var(--surface);border:1px solid var(--border);border-radius:100px;padding:6px 16px;font-size:12.5px;font-weight:500;color:var(--ink);transition:background .2s,border-color .2s,transform .15s;}
+.tag:hover{background:rgba(108,99,255,.1);border-color:rgba(108,99,255,.35);transform:scale(1.05);}
+
+/* EXPERIENCE */
+#experience{background:var(--bg2);}
+.tl{display:flex;flex-direction:column;}
+.tl-item{display:grid;grid-template-columns:190px 1fr;gap:52px;padding:50px 0;border-bottom:1px solid var(--border);position:relative;}
+.tl-item:last-child{border-bottom:none;}
+.tl-item:hover{background:rgba(108,99,255,.02);}
+.tl-line{position:absolute;left:188px;top:60px;bottom:0;width:1px;background:linear-gradient(to bottom,var(--accent2),transparent);opacity:0;transition:opacity .4s;}
+.tl-dot{position:absolute;left:183px;top:64px;width:12px;height:12px;border-radius:50%;border:2px solid var(--accent2);background:var(--bg2);z-index:2;transition:transform .2s,background .2s,box-shadow .2s;}
+.tl-item:hover .tl-line{opacity:1;}
+.tl-item:hover .tl-dot{background:var(--accent2);transform:scale(1.4);box-shadow:0 0 12px var(--accent);}
+.tl-date{font-size:11.5px;font-weight:700;color:var(--accent2);margin-bottom:8px;letter-spacing:.08em;}
+.tl-co{font-size:13px;color:var(--muted2);font-weight:500;}
+.tl-role{font-family:'Playfair Display',serif;font-size:22px;margin-bottom:18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.tl-now{font-family:'DM Sans',sans-serif;font-size:9.5px;font-weight:800;background:rgba(52,211,153,.1);color:var(--green);border:1px solid rgba(52,211,153,.25);border-radius:100px;padding:3px 11px;letter-spacing:.1em;text-transform:uppercase;}
+.tl-leader{font-family:'DM Sans',sans-serif;font-size:9.5px;font-weight:800;background:rgba(167,139,250,.12);color:var(--accent2);border:1px solid rgba(167,139,250,.3);border-radius:100px;padding:3px 11px;letter-spacing:.1em;text-transform:uppercase;}
+.tl-ul{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.tl-ul li{color:var(--muted2);padding-left:20px;position:relative;font-size:14px;line-height:1.8;}
+.tl-ul li::before{content:'▸';position:absolute;left:0;color:var(--accent2);font-size:11px;top:3px;}
+
+/* SKILLS */
+.skills-tabs{display:flex;gap:6px;margin-bottom:40px;flex-wrap:wrap;}
+.tab-btn{border:1.5px solid var(--border);background:transparent;color:var(--muted2);border-radius:100px;padding:8px 20px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:.06em;text-transform:uppercase;transition:all .2s;}
+.tab-btn:hover{border-color:var(--accent2);color:var(--accent2);}
+.tab-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 0 20px rgba(108,99,255,.35);}
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px;}
+.sk-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px 22px;display:flex;align-items:center;gap:15px;transition:transform .25s,border-color .25s,box-shadow .25s,opacity .3s;}
+.sk-card:hover{transform:translateY(-5px) scale(1.01);border-color:rgba(108,99,255,.3);box-shadow:0 16px 40px rgba(0,0,0,.3);}
+.sk-card.hidden{opacity:0;pointer-events:none;transform:scale(.92);}
+.sk-icon{width:44px;height:44px;background:rgba(108,99,255,.08);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0;}
+.sk-name{font-weight:600;font-size:13.5px;margin-bottom:6px;}
+.sk-bar{height:3px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;}
+.sk-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--accent3));width:0;transition:width 1.3s cubic-bezier(.4,0,.2,1);}
+
+/* CERTS */
+#certifications{background:var(--bg2);}
+.cert-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;}
+.cert-card{background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:32px 26px;transition:transform .25s,border-color .25s,box-shadow .25s;position:relative;overflow:hidden;}
+.cert-card:hover{transform:translateY(-8px);border-color:rgba(108,99,255,.25);box-shadow:0 24px 60px rgba(0,0,0,.4);}
+.cert-glow{position:absolute;width:120px;height:120px;border-radius:50%;top:-30px;right:-30px;background:radial-gradient(circle,rgba(108,99,255,.12),transparent 70%);pointer-events:none;}
+.cert-em{font-size:36px;margin-bottom:16px;display:block;}
+.cert-name{font-family:'Playfair Display',serif;font-size:18px;margin-bottom:7px;}
+.cert-iss{font-size:12.5px;color:var(--muted2);font-weight:500;}
+
+/* CONTACT */
+#contact{background:var(--bg);}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;}
+.c-head{font-family:'Playfair Display',serif;font-size:clamp(36px,4.5vw,60px);font-weight:700;line-height:1.05;margin-bottom:22px;letter-spacing:-.02em;}
+.c-head em{font-style:italic;color:var(--accent2);}
+.c-desc{color:var(--muted2);line-height:1.9;margin-bottom:40px;}
+.c-items{display:flex;flex-direction:column;gap:12px;}
+.c-item{display:flex;align-items:center;gap:16px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px 20px;text-decoration:none;color:var(--ink);transition:transform .2s,border-color .2s,box-shadow .2s;}
+.c-item:hover{transform:translateX(7px);border-color:rgba(108,99,255,.3);box-shadow:0 8px 28px rgba(108,99,255,.07);}
+.c-icon{width:42px;height:42px;background:rgba(108,99,255,.1);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.c-lbl{font-size:10.5px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.12em;}
+.c-val{font-size:14px;font-weight:600;}
+.f-group{margin-bottom:20px;}
+.f-group label{display:block;font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted2);margin-bottom:9px;}
+.f-group input,.f-group textarea{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:13px 17px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);outline:none;resize:none;transition:border-color .2s,box-shadow .2s;}
+.f-group input::placeholder,.f-group textarea::placeholder{color:rgba(255,255,255,.15);}
+.f-group input:focus,.f-group textarea:focus{border-color:var(--accent2);box-shadow:0 0 0 4px rgba(108,99,255,.12);}
+.f-group textarea{height:118px;}
+.btn-send{width:100%;background:linear-gradient(90deg,var(--accent),var(--accent3));color:#fff;border:none;border-radius:100px;padding:16px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:transform .2s,box-shadow .2s;letter-spacing:.06em;text-transform:uppercase;}
+.btn-send:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(108,99,255,.4);}
+.form-ok{display:none;text-align:center;padding:28px;background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.2);border-radius:16px;color:var(--green);font-weight:700;}
+
+/* FOOTER */
+footer{padding:30px 60px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--bg2);position:relative;z-index:1;}
+footer p{font-size:13px;color:var(--muted);}
+.f-links{display:flex;gap:24px;}
+.f-links a{font-size:13px;color:var(--muted);text-decoration:none;font-weight:500;transition:color .2s;}
+.f-links a:hover{color:var(--accent2);}
+
+/* ANIMATIONS */
+@keyframes riseIn{from{opacity:0;transform:translateY(26px);}to{opacity:1;transform:translateY(0);}}
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .75s ease,transform .75s ease;}
+.reveal.vis{opacity:1;transform:none;}
+.d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}.d4{transition-delay:.4s;}
+
+/* RESPONSIVE */
+@media(max-width:960px){
+  nav{padding:0 24px;}
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+  .mobile-menu{display:flex;}
+  section{padding:72px 24px;}
+  #hero{padding:100px 24px 60px;}
+  .hero-inner{grid-template-columns:1fr;}
+  .hero-card-wrap,.float-badge{display:none;}
+  .about-grid,.contact-grid{grid-template-columns:1fr;gap:48px;}
+  .tl-item{grid-template-columns:1fr;gap:8px;}.tl-dot,.tl-line{display:none;}
+  footer{flex-direction:column;gap:14px;padding:24px;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="particle-canvas"></canvas>
+<div id="cur"><div id="cur-dot"></div><div id="cur-ring"></div></div>
+<div id="prog"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">UP<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#certifications">Certs</a></li>
+    <li><a href="#contact" class="nav-cta">Hire Me</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<ul class="mobile-menu" id="mobileMenu">
+  <li><a href="#about" onclick="closeMenu()">About</a></li>
+  <li><a href="#experience" onclick="closeMenu()">Experience</a></li>
+  <li><a href="#skills" onclick="closeMenu()">Skills</a></li>
+  <li><a href="#certifications" onclick="closeMenu()">Certs</a></li>
+  <li><a href="#contact" onclick="closeMenu()">Hire Me</a></li>
+</ul>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="float-badge fb1"><span class="fbd" style="background:var(--green)"></span>9+ Years Experience</div>
+  <div class="float-badge fb2"><span class="fbd" style="background:var(--gold)"></span>2× Award Winner</div>
+  <div class="float-badge fb3"><span class="fbd" style="background:var(--accent3)"></span>Open to Work</div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">Customer Support Team Leader</div>
+      <h1 class="hero-name"><span class="n1">UJWAL</span><span class="n2">PANDE</span></h1>
+      <p class="hero-sub">Leading teams, resolving escalations, building loyalty</p>
+      <p class="hero-desc">9+ years of excellence in international voice processes, escalation management, and team leadership across BPO &amp; SaaS environments. Currently driving team performance and customer outcomes at ESDS Software Solutions.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-glow">Get in Touch ↗</a>
+        <a href="#experience" class="btn-glass">View Experience</a>
+      </div>
+    </div>
+    <div class="hero-card-wrap" id="tiltWrap">
+      <div class="hero-card" id="heroCard">
+        <div class="card-shine" id="cardShine"></div>
+        <div class="hero-photo-outer">
+          <div class="hero-photo-ring"></div>
+          <div class="hero-photo-inner">
+            <img src="https://static.wixstatic.com/media/46d7d7_36f98be62e694e1c83e288f64d13a175~mv2.jpg/v1/crop/x_0,y_3,w_1011,h_1011/fill/w_480,h_480,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/ChatGPT%20Image%20Dec%2027%2C%202025%2C%2001_06_25%20PM_edited.jpg" alt="Ujwal Pande"/>
+          </div>
+        </div>
+        <p class="card-name">Ujwal Pande</p>
+        <p class="card-title">Support Team Leader</p>
+        <div class="card-divider"></div>
+        <div class="card-stats">
+          <div class="tipwrap"><span class="cs-num" data-target="9">0</span><span class="cs-lbl">Yrs Exp</span><div class="tip">Since 2014</div></div>
+          <div class="tipwrap"><span class="cs-num" data-target="4">0</span><span class="cs-lbl">Languages</span><div class="tip">EN · HI · MR · MW</div></div>
+          <div class="tipwrap"><span class="cs-num">2×</span><span class="cs-lbl">Awards</span><div class="tip">ESDS Excellence</div></div>
+        </div>
+        <div class="avail-pill"><span class="avail-dot"></span>Available for Opportunities</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap" aria-hidden="true">
+  <div class="marquee-track">
+    <span class="mq-item">Team Leadership <span class="mq-sep">✦</span></span>
+    <span class="mq-item">Escalation Management <span class="mq-sep">✦</span></span>
+    <span class="mq-item">Queue Management <span class="mq-sep">✦</span></span>
+    <span class="mq-item">CSAT Excellence <span class="mq-sep">✦</span></span>
+    <span class="mq-item">Agent Coaching <span class="mq-sep">✦</span></span>
+    <span class="mq-item">International Voice <span class="mq-sep">✦</span></span>
+    <span class="mq-item">CRM Documentation <span class="mq-sep">✦</span></span>
+    <span class="mq-item">Root Cause Analysis <span class="mq-sep">✦</span></span>
+    <span class="mq-item">SaaS Support <span class="mq-sep">✦</span></span>
+    <span class="mq-item">Team Leadership <span class="mq-sep">✦</span></span>
+    <span class="mq-item">Escalation Management <span class="mq-sep">✦</span></span>
+    <span class="mq-item">Queue Management <span class="mq-sep">✦</span></span>
+    <span class="mq-item">CSAT Excellence <span class="mq-sep">✦</span></span>
+    <span class="mq-item">Agent Coaching <span class="mq-sep">✦</span></span>
+    <span class="mq-item">International Voice <span class="mq-sep">✦</span></span>
+    <span class="mq-item">CRM Documentation <span class="mq-sep">✦</span></span>
+    <span class="mq-item">Root Cause Analysis <span class="mq-sep">✦</span></span>
+    <span class="mq-item">SaaS Support <span class="mq-sep">✦</span></span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <p class="s-label reveal">01 — About</p>
+    <div class="about-grid">
+      <div>
+        <h2 class="s-head reveal">Customer-first,<br><em>every time.</em></h2>
+        <p class="ap reveal">I'm a <strong>Customer Support Team Leader</strong> with 9+ years of deep experience in international voice processes across BPO and SaaS environments. I specialize in escalation management, dispute resolution, and building high-performing support teams.</p>
+        <p class="ap reveal d1">Currently at <strong>ESDS Software Solutions</strong>, I lead queue management, coach new joinees, manage ticket assignments, and serve as Subject Matter Expert — championing a culture of empathy, accountability, and continuous improvement.</p>
+        <p class="ap reveal d2">My approach is simple: listen deeply, resolve fairly, and develop a team that delivers exceptional outcomes every single day.</p>
+        <div class="awards reveal d3">
+          <div class="aw-card"><span style="font-size:26px">🏆</span><div><p class="aw-t">Customer Excellence Award</p><p class="aw-s">ESDS Software Solutions · 2025</p></div></div>
+          <div class="aw-card"><span style="font-size:26px">⭐</span><div><p class="aw-t">Star Performer Award</p><p class="aw-s">ESDS Software Solutions · 2024</p></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="info-block reveal"><p class="info-title">Languages Spoken</p><div class="tag-row"><span class="tag">🇬🇧 English</span><span class="tag">🇮🇳 Hindi</span><span class="tag">🟠 Marathi</span><span class="tag">🟡 Marwadi</span></div></div>
+        <div class="info-block reveal d1"><p class="info-title">CRM &amp; Tools</p><div class="tag-row"><span class="tag">SupportPal</span><span class="tag">Kayako</span><span class="tag">WHMCS</span><span class="tag">SharePoint</span></div></div>
+        <div class="info-block reveal d2"><p class="info-title">Based In</p><div class="tag-row"><span class="tag">📍 Nashik, Maharashtra</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="container">
+    <p class="s-label reveal">02 — Career</p>
+    <h2 class="s-head reveal">Work <em>Experience</em></h2>
+    <div class="tl">
+
+      <!-- ESDS - Team Leader -->
+      <div class="tl-item reveal">
+        <div class="tl-line"></div><div class="tl-dot"></div>
+        <div><p class="tl-date">2023 — Present</p><p class="tl-co">ESDS Software Solutions</p></div>
+        <div>
+          <p class="tl-role">Team Leader — Customer Support <span class="tl-now">Current</span> <span class="tl-leader">Team Lead</span></p>
+          <ul class="tl-ul">
+            <li>Oversee daily queue operations and ticket allocation across multiple support channels, maintaining SLA compliance and a balanced team workload.</li>
+            <li>Prepare and maintain team rosters, performance trackers, and monthly disposition reports presented to senior leadership.</li>
+            <li>Mentor and onboard new team members, accelerating ramp-up through structured coaching and regular QA-driven feedback sessions.</li>
+            <li>Serve as the primary escalation point for high-severity customer issues — delivering empathetic, decisive resolutions that protect trust and minimize churn.</li>
+            <li>Drive proactive client outreach campaigns focused on product adoption, compliance adherence, and retention — consistently exceeding engagement targets.</li>
+            <li>Coordinate rapid response to service disruptions and security incidents, minimising customer impact through clear communication and swift action.</li>
+            <li>Author and continuously update the team's standard operating procedures, ensuring consistent, high-quality service delivery across all channels.</li>
+            <li>Partner with technical teams on complex escalations, acting as the bridge between customer expectations and engineering timelines.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- TCS -->
+      <div class="tl-item reveal d1">
+        <div class="tl-line"></div><div class="tl-dot"></div>
+        <div><p class="tl-date">2019 — May 2026</p><p class="tl-co">Tata Consultancy Services</p></div>
+        <div>
+          <p class="tl-role">Associate</p>
+          <ul class="tl-ul">
+            <li>Served as the escalation point for high-priority customer complaints, delivering customer-focused resolutions.</li>
+            <li>Supervised a team of process associates, ensuring adherence to performance metrics and quality standards.</li>
+            <li>Mediated disputes between customers and internal stakeholders, fostering brand trust and long-term loyalty.</li>
+            <li>Consistently exceeded KPIs for first-call resolution, response time, and CSAT scores.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Phikanet -->
+      <div class="tl-item reveal d2">
+        <div class="tl-line"></div><div class="tl-dot"></div>
+        <div><p class="tl-date">2018 — 2019</p><p class="tl-co">Phikanet BPO Services</p></div>
+        <div>
+          <p class="tl-role">Associate</p>
+          <ul class="tl-ul">
+            <li>Managed international calls, addressing customer queries with professionalism and efficiency.</li>
+            <li>Leveraged CRM tools for consistent service delivery and developed active listening skills.</li>
+            <li>Contributed to team goals by managing call queues and achieving performance targets.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- HDFC -->
+      <div class="tl-item reveal d3">
+        <div class="tl-line"></div><div class="tl-dot"></div>
+        <div><p class="tl-date">2014 — 2018</p><p class="tl-co">HDFC Credila</p></div>
+        <div>
+          <p class="tl-role">Digital Marketing Associate</p>
+          <ul class="tl-ul">
+            <li>Engaged customers across digital channels, providing resolution support and promoting product awareness.</li>
+            <li>Strengthened communication skills through direct customer interactions and data-driven insights.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="container">
+    <p class="s-label reveal">03 — Expertise</p>
+    <h2 class="s-head reveal">Core <em>Skills</em></h2>
+    <div class="skills-tabs reveal">
+      <button class="tab-btn active" data-f="all">All</button>
+      <button class="tab-btn" data-f="lead">Leadership</button>
+      <button class="tab-btn" data-f="voice">Voice &amp; Support</button>
+      <button class="tab-btn" data-f="tech">Technical</button>
+    </div>
+    <div class="skills-grid">
+      <div class="sk-card" data-c="lead"><div class="sk-icon">👥</div><div><div class="sk-name">Team Leadership &amp; Coaching</div><div class="sk-bar"><div class="sk-fill" data-l="95"></div></div></div></div>
+      <div class="sk-card" data-c="lead"><div class="sk-icon">📋</div><div><div class="sk-name">Queue &amp; Roster Management</div><div class="sk-bar"><div class="sk-fill" data-l="93"></div></div></div></div>
+      <div class="sk-card" data-c="lead"><div class="sk-icon">📈</div><div><div class="sk-name">Escalation Management</div><div class="sk-bar"><div class="sk-fill" data-l="98"></div></div></div></div>
+      <div class="sk-card" data-c="voice"><div class="sk-icon">🎯</div><div><div class="sk-name">International Voice Process</div><div class="sk-bar"><div class="sk-fill" data-l="95"></div></div></div></div>
+      <div class="sk-card" data-c="voice"><div class="sk-icon">⚖️</div><div><div class="sk-name">Dispute Mediation</div><div class="sk-bar"><div class="sk-fill" data-l="90"></div></div></div></div>
+      <div class="sk-card" data-c="voice"><div class="sk-icon">🤝</div><div><div class="sk-name">Complaint Resolution</div><div class="sk-bar"><div class="sk-fill" data-l="97"></div></div></div></div>
+      <div class="sk-card" data-c="voice"><div class="sk-icon">📞</div><div><div class="sk-name">Inbound / Outbound Calls</div><div class="sk-bar"><div class="sk-fill" data-l="95"></div></div></div></div>
+      <div class="sk-card" data-c="voice"><div class="sk-icon">✉️</div><div><div class="sk-name">Email &amp; Chat Support</div><div class="sk-bar"><div class="sk-fill" data-l="93"></div></div></div></div>
+      <div class="sk-card" data-c="tech"><div class="sk-icon">🗂️</div><div><div class="sk-name">CRM Documentation</div><div class="sk-bar"><div class="sk-fill" data-l="88"></div></div></div></div>
+      <div class="sk-card" data-c="lead"><div class="sk-icon">💛</div><div><div class="sk-name">CSAT &amp; QA Monitoring</div><div class="sk-bar"><div class="sk-fill" data-l="94"></div></div></div></div>
+      <div class="sk-card" data-c="tech"><div class="sk-icon">🔍</div><div><div class="sk-name">Root Cause Analysis</div><div class="sk-bar"><div class="sk-fill" data-l="89"></div></div></div></div>
+      <div class="sk-card" data-c="lead"><div class="sk-icon">⏱️</div><div><div class="sk-name">Multitasking &amp; Time Mgmt</div><div class="sk-bar"><div class="sk-fill" data-l="91"></div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications">
+  <div class="container">
+    <p class="s-label reveal">04 — Credentials</p>
+    <h2 class="s-head reveal"><em>Certifications</em></h2>
+    <div class="cert-grid">
+      <div class="cert-card reveal"><div class="cert-glow"></div><span class="cert-em">🎖️</span><p class="cert-name">Lean Six Sigma</p><p class="cert-iss">Certified Professional</p></div>
+      <div class="cert-card reveal d1"><div class="cert-glow"></div><span class="cert-em">🐧</span><p class="cert-name">Linux Fundamentals</p><p class="cert-iss">Great Learning</p></div>
+      <div class="cert-card reveal d2"><div class="cert-glow"></div><span class="cert-em">🌐</span><p class="cert-name">cPanel &amp; Web Hosting</p><p class="cert-iss">cPanel University</p></div>
+      <div class="cert-card reveal d3"><div class="cert-glow"></div><span class="cert-em">🖥️</span><p class="cert-name">Web Hosting 101</p><p class="cert-iss">Udemy</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div>
+        <p class="s-label reveal">05 — Get in Touch</p>
+        <h2 class="c-head reveal">Let's <em>connect.</em></h2>
+        <p class="c-desc reveal">Open to new opportunities in customer success, escalation management, and support leadership. Drop me a message — I respond within 24 hours.</p>
+        <div class="c-items reveal">
+          <a href="tel:+917276841683" class="c-item"><div class="c-icon">📞</div><div><p class="c-lbl">Phone</p><p class="c-val">+91 72768 41683</p></div></a>
+          <a id="email-link" href="#" class="c-item"><div class="c-icon">✉️</div><div><p class="c-lbl">Email</p><p class="c-val" id="email-display"></p></div></a>
+          <a href="https://www.linkedin.com/in/ujwal-pande-039607101/" target="_blank" class="c-item"><div class="c-icon">💼</div><div><p class="c-lbl">LinkedIn</p><p class="c-val">ujwal-pande-039607101</p></div></a>
+        </div>
+      </div>
+      <div class="reveal d1">
+        <div class="f-group"><label>Your Name</label><input type="text" id="fn" placeholder="Jane Smith"/></div>
+        <div class="f-group"><label>Email Address</label><input type="email" id="fe2" placeholder="jane@company.com"/></div>
+        <div class="f-group"><label>Message</label><textarea id="fm" placeholder="Tell me about the opportunity…"></textarea></div>
+        <button class="btn-send" id="sendBtn" onclick="doSend()">Send Message →</button>
+        <div class="form-ok" id="formOk">🎉 Sent! I'll be in touch within 24 hours.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 Ujwal Pande · Nashik, Maharashtra</p>
+  <div class="f-links">
+    <a id="footer-email" href="#">Email</a>
+    <a href="https://www.linkedin.com/in/ujwal-pande-039607101/" target="_blank">LinkedIn</a>
+    <a href="https://ujwalpande008.github.io/">Portfolio</a>
+  </div>
+</footer>
+
+<script>
+// EMAIL
+(function(){
+  var e='ujwalpande008@gmail.com';
+  var el=document.getElementById('email-link'),ed=document.getElementById('email-display'),fe=document.getElementById('footer-email');
+  if(el)el.href='mailto:'+e;if(ed)ed.textContent=e;if(fe)fe.href='mailto:'+e;
+})();
+
+// MOBILE MENU
+function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open');}
+function closeMenu(){document.getElementById('mobileMenu').classList.remove('open');}
+
+// PARTICLE CANVAS
+(function(){
+  var cv=document.getElementById('particle-canvas'),ctx=cv.getContext('2d');
+  var W,H,pts=[],mouse={x:-9999,y:-9999};
+  var COLS=['#6c63ff','#a78bfa','#ec4899','#2dd4bf','#fbbf24','#34d399'];
+  var N=110;
+  function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;}
+  resize();window.addEventListener('resize',resize);
+  window.addEventListener('mousemove',function(e){mouse.x=e.clientX;mouse.y=e.clientY;});
+  function Pt(){this.reset=function(){this.x=Math.random()*W;this.y=Math.random()*H;this.ox=this.x;this.oy=this.y;this.vx=(Math.random()-.5)*.35;this.vy=(Math.random()-.5)*.35;this.r=Math.random()*1.6+.4;this.col=COLS[Math.floor(Math.random()*COLS.length)];this.a=Math.random()*.45+.18;};this.reset();}
+  for(var i=0;i<N;i++)pts.push(new Pt());
+  function hex(h,a){var r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16);return'rgba('+r+','+g+','+b+','+a+')';}
+  function frame(){
+    ctx.clearRect(0,0,W,H);
+    for(var i=0;i<N;i++){for(var j=i+1;j<N;j++){var dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<120){ctx.beginPath();ctx.strokeStyle='rgba(108,99,255,'+(1-d/120)*.1+')';ctx.lineWidth=.5;ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.stroke();}}}
+    for(var i=0;i<N;i++){var p=pts[i];var dx=mouse.x-p.x,dy=mouse.y-p.y,md=Math.sqrt(dx*dx+dy*dy);if(md<170){var f=(170-md)/170;p.vx-=dx/md*f*2.2;p.vy-=dy/md*f*2.2;}p.vx+=(p.ox-p.x)*.0025;p.vy+=(p.oy-p.y)*.0025;p.vx*=.96;p.vy*=.96;p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=hex(p.col,p.a);ctx.fill();}
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+// CURSOR
+(function(){
+  var el=document.getElementById('cur'),tx=0,ty=0,cx=0,cy=0;
+  document.addEventListener('mousemove',function(e){tx=e.clientX;ty=e.clientY;});
+  function tick(){cx+=(tx-cx)*.13;cy+=(ty-cy)*.13;el.style.left=cx+'px';el.style.top=cy+'px';requestAnimationFrame(tick);}tick();
+})();
+
+// PROGRESS BAR
+window.addEventListener('scroll',function(){var p=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;document.getElementById('prog').style.width=p+'%';});
+
+// 3D TILT
+(function(){
+  var wrap=document.getElementById('tiltWrap'),card=document.getElementById('heroCard'),shine=document.getElementById('cardShine');
+  if(!wrap||!card)return;
+  wrap.addEventListener('mousemove',function(e){var r=card.getBoundingClientRect();var rx=((e.clientY-(r.top+r.height/2))/r.height)*-18;var ry=((e.clientX-(r.left+r.width/2))/r.width)*18;card.style.transform='rotateX('+rx+'deg) rotateY('+ry+'deg) scale(1.03)';if(shine){shine.style.background='radial-gradient(circle at '+((e.clientX-r.left)/r.width*100)+'% '+((e.clientY-r.top)/r.height*100)+'%, rgba(255,255,255,.08), transparent 60%)';shine.style.opacity='1';}});
+  wrap.addEventListener('mouseleave',function(){card.style.transform='';if(shine)shine.style.opacity='0';});
+})();
+
+// COUNTERS
+(function(){
+  var done=false;
+  function run(){if(done)return;if(window.scrollY<50){done=true;document.querySelectorAll('[data-target]').forEach(function(el){var t=parseInt(el.dataset.target),c=0;var id=setInterval(function(){c+=Math.ceil(t/55);if(c>=t){c=t;clearInterval(id);}el.textContent=c+'+';},18);});}}
+  setTimeout(run,700);window.addEventListener('scroll',run);
+})();
+
+// SCROLL REVEAL
+(function(){
+  var els=document.querySelectorAll('.reveal');
+  var io=new IntersectionObserver(function(ent){ent.forEach(function(e){if(e.isIntersecting){e.target.classList.add('vis');io.unobserve(e.target);}});},{threshold:.1});
+  els.forEach(function(el){io.observe(el);});
+})();
+
+// SKILL BARS
+(function(){
+  var done=false,fills=document.querySelectorAll('.sk-fill');
+  var io=new IntersectionObserver(function(ent){ent.forEach(function(e){if(e.isIntersecting&&!done){done=true;fills.forEach(function(f){setTimeout(function(){f.style.width=f.dataset.l+'%';},200);});}});},{threshold:.15});
+  var s=document.getElementById('skills');if(s)io.observe(s);
+})();
+
+// SKILLS FILTER
+document.querySelectorAll('.tab-btn').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+    btn.classList.add('active');
+    var f=btn.dataset.f;
+    document.querySelectorAll('.sk-card').forEach(function(c){if(f==='all'||c.dataset.c===f)c.classList.remove('hidden');else c.classList.add('hidden');});
+  });
+});
+
+// FORM
+function doSend(){
+  var n=document.getElementById('fn').value.trim(),e=document.getElementById('fe2').value.trim(),m=document.getElementById('fm').value.trim();
+  var btn=document.getElementById('sendBtn');
+  if(!n||!e||!m){btn.textContent='⚠ Fill in all fields';setTimeout(function(){btn.textContent='Send Message →';},2000);return;}
+  btn.style.display='none';document.getElementById('formOk').style.display='block';
+}
+</script>
+</body>
+</html>
